@@ -1,8 +1,7 @@
 import React from "react";
 import "./Navbar.css"; // Import styles specific to the Navbar
-
-import tempLogo from "../assets/images/temp_logo.png"; // Placeholder logo
-import tempProfile from "../assets/images/temp_profile.png"; // Placeholder profile image
+import tempLogo from "../assets/images/navbar/temp_logo.png"; // Placeholder logo
+import tempProfile from "../assets/images/navbar/temp_profile.png"; // Placeholder profile image
 
 const Navbar = () => {
     return (
