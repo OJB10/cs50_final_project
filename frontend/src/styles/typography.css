@@ -1,0 +1,210 @@
+
+/* Typography System for Trade Dash */
+
+/* Font Imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Pacifico&family=Spectral:wght@400;700&display=swap');
+
+/* Root Variables */
+:root {
+  --base-font-size: 16px; /* Scalable base font size */
+  --line-height: 1.5; /* Default line height */
+}
+
+/* Desktop Styles (≥ 1024px) */
+.h1-heading {
+  font-family: 'Spectral', serif;
+  font-weight: 700;
+  font-size: 2.5rem; /* 40px */
+  line-height: 1.25;
+  letter-spacing: -0.02em; /* Adjusted for better readability */
+}
+
+.h2-heading {
+  font-family: 'Spectral', serif;
+  font-weight: 700;
+  font-size: 2rem; /* 32px */
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.h3-heading {
+  font-family: 'Spectral', serif;
+  font-weight: 700;
+  font-size: 1.75rem; /* 28px */
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.h4-heading {
+  font-family: 'Spectral', serif;
+  font-weight: 700;
+  font-size: 1.5rem; /* 24px */
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+
+.body-large {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.6;
+  letter-spacing: 0%;
+}
+
+.body-default {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 1rem; /* 16px */
+  line-height: 1.5;
+  letter-spacing: 0%;
+}
+
+.text-small {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.45;
+  letter-spacing: 0%;
+}
+
+.text-accent {
+  font-family: 'Pacifico', cursive;
+  font-weight: 400;
+  font-size: 1rem; /* 16px */
+  line-height: 1.55;
+  letter-spacing: 0%;
+}
+
+/* Tablet Styles (481px-1024px) */
+@media screen and (max-width: 1024px) {
+  .h1-heading {
+    font-family: 'Spectral', serif;
+    font-weight: 700;
+    font-size: 2.25rem; /* 36px */
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  
+  .h2-heading {
+    font-family: 'Spectral', serif;
+    font-weight: 700;
+    font-size: 2rem; /* 32px */
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+  }
+  
+  .h3-heading {
+    font-family: 'Spectral', serif;
+    font-weight: 700;
+    font-size: 1.75rem; /* 28px */
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+  }
+  
+  .h4-heading {
+    font-family: 'Spectral', serif;
+    font-weight: 700;
+    font-size: 1.5rem; /* 24px */
+    line-height: 140%;
+    letter-spacing: -0.02em;
+  }
+  
+  .body-large {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 1rem; /* 16px */
+    line-height: 1.55;
+    letter-spacing: 0%;
+  }
+  
+  .body-default {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 1rem; /* 16px */
+    line-height: 1.5;
+    letter-spacing: 0%;
+  }
+  
+  .text-small {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.4;
+    letter-spacing: 0%;
+  }
+  
+  .text-accent {
+    font-family: 'Pacifico', cursive;
+    font-weight: 400;
+    font-size: 1rem; /* 16px */
+    line-height: 1.6;
+    letter-spacing: 0%;
+  }
+}
+
+/* Mobile Styles (≤ 480px) */
+@media screen and (max-width: 480px) {
+  .h1-heading {
+    font-family: 'Spectral', serif;
+    font-weight: 700;
+    font-size: 2rem; /* 32px */
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  
+  .h2-heading {
+    font-family: 'Spectral', serif;
+    font-weight: 700;
+    font-size: 1.75rem; /* 28px */
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  
+  .h3-heading {
+    font-family: 'Spectral', serif;
+    font-weight: 700;
+    font-size: 1.5rem; /* 24px */
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+  }
+  
+  .h4-heading {
+    font-family: 'Spectral', serif;
+    font-weight: 700;
+    font-size: 1.25rem; /* 20px */
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+  }
+  
+  .body-large {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 1rem; /* 16px */
+    line-height: 1.6;
+    letter-spacing: 0%;
+  }
+  
+  .body-default {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.5; /* Reduced for better content density */
+    letter-spacing: 0%;
+  }
+  
+  .text-small {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem; /* 12px */
+    line-height: 1.45;
+    letter-spacing: 0%;
+  }
+  
+  .text-accent {
+    font-family: 'Pacifico', cursive;
+    font-weight: 400;
+    font-size: 1rem; /* 16px */
+    line-height: 1.65;
+    letter-spacing: 0%;
+  }
+}

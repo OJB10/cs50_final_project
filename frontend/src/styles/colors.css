@@ -1,0 +1,93 @@
+/* Color System for Trade Dash */
+:root {
+    /* Primary Brand Colors */
+    --illuminatic-light: #FF7FFF; /* Bright magenta, lighter tone */
+    --illuminatic: #BA4FFF; /* Core primary magenta */
+    --illuminatic-dark: #7F1FCC; /* Deep magenta */
+  
+    /* Secondary Brand Colors */
+    --dragon-light: #FF71FF; /* Vibrant pink, lighter tone */
+    --dragon: #FF41F2; /* Core secondary pink */
+    --dragon-dark: #CC00EF; /* Deep pink */
+  
+    /* Tertiary Brand Colors */
+    --tangerine-light: #FF7F7D; /* Warm orange, lighter tone */
+    --tangerine: #FF504A; /* Core tertiary orange */
+    --tangerine-dark: #CC3017; /* Deep orange */
+  
+    /* System Colors */
+    --iris: #5F5FEF; /* Calming blue */
+    --evergreen: #40C093; /* Soft green */
+    --caution: #FFB82B; /* Bright yellow for warnings */
+    --strawberry: #FF4242; /* Strong red for errors */
+  
+    /* Neutral Colors */
+    --neutral-50: #F5F5F5; /* Light neutral (replaces strong white) */
+    --neutral-200: #E5E5E5; /* Light grey (border colour) */
+    --neutral-500: #B4B4C7; /* Soft grey */
+    --neutral-700: #5C5C77; /* Slate (secondary text) */
+    --neutral-900: #202641; /* Deep neutral (replaces onyx) */
+  
+    /* Light Mode Semantic Colors (default) */
+    --background-primary: var(--neutral-50);
+    --background-secondary: #FFFFFF;
+    --text-primary: var(--neutral-900);
+    --text-secondary: var(--neutral-700);
+    --text-accent: var(--illuminatic);
+    --border-color: var(--neutral-200);
+  
+    /* System Semantic Colors */
+    --accent-color: var(--iris);
+    --success-color: var(--evergreen);
+    --warning-color: var(--caution);
+    --error-color: var(--strawberry);
+  }
+  
+  /* Dark Mode Theme */
+  [data-theme='dark'] {
+    --background-primary: var(--neutral-900);
+    --background-secondary: #2A2A3C; /* Darker background for secondary elements */
+    --text-primary: var(--neutral-50);
+    --text-secondary: var(--neutral-500);
+    --text-accent: var(--illuminatic-light);
+    --border-color: var(--neutral-700);
+  
+    /* System colours remain the same but can be adjusted for better visibility if needed */
+    --accent-color: var(--iris);
+    --success-color: var(--evergreen);
+    --warning-color: var(--caution);
+    --error-color: var(--strawberry);
+  }
+  
+  /* Utility Classes for Colors */
+  .bg-primary { background-color: var(--background-primary); }
+  .bg-secondary { background-color: var(--background-secondary); }
+  
+  .text-primary { color: var(--text-primary); }
+  .text-secondary { color: var(--text-secondary); }
+  .text-accent { color: var(--text-accent); }
+  
+  /* Brand Color Classes */
+  .bg-illuminatic-light { background-color: var(--illuminatic-light); }
+  .bg-illuminatic { background-color: var(--illuminatic); }
+  .bg-illuminatic-dark { background-color: var(--illuminatic-dark); }
+  
+  .bg-dragon-light { background-color: var(--dragon-light); }
+  .bg-dragon { background-color: var(--dragon); }
+  .bg-dragon-dark { background-color: var(--dragon-dark); }
+  
+  .bg-tangerine-light { background-color: var(--tangerine-light); }
+  .bg-tangerine { background-color: var(--tangerine); }
+  .bg-tangerine-dark { background-color: var(--tangerine-dark); }
+  
+  /* System Color Classes */
+  .bg-success { background-color: var(--success-color); }
+  .bg-warning { background-color: var(--warning-color); }
+  .bg-error { background-color: var(--error-color); }
+  .bg-accent { background-color: var(--accent-color); }
+  
+  /* Text Color Utilities */
+  .text-success { color: var(--success-color); }
+  .text-warning { color: var(--warning-color); }
+  .text-error { color: var(--error-color); }
+  .text-accent { color: var(--accent-color); }
