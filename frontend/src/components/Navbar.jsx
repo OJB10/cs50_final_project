@@ -1,15 +1,20 @@
 import React from "react";
-import "./Navbar.css";
-import tempLogo from '../assets/images/temp_logo.png';
-import tempProfile from '../assets/images/temp_profile.png';
+import "./Navbar.css"; // Import styles specific to the Navbar
+
+import tempLogo from "../assets/images/temp_logo.png"; // Placeholder logo
+import tempProfile from "../assets/images/temp_profile.png"; // Placeholder profile image
 
 const Navbar = () => {
     return (
-        <nav className="navbar">
+        <nav className="navbar full-width">
             {/* Logo */}
             <div className="navbar-logo">
                 <a href="/">
-                    <img src={tempLogo} alt="Logo" className="logo-image" />
+                    <img
+                        src={tempLogo}
+                        alt="Logo"
+                        className="logo-image"
+                    />
                 </a>
             </div>
 
@@ -19,17 +24,19 @@ const Navbar = () => {
                     type="text"
                     className="search-input"
                     placeholder="Search"
+                    aria-label="Search"
                 />
-                <button className="search-button">
-                    <span className="search-icon"></span>
-                </button>
             </div>
 
-            {/* Profile Circle */}
+            {/* Profile Image */}
             <div className="navbar-profile">
-                <div className="profile-circle">
-                    <img src={tempProfile} alt="Profile" className="profile-image" />
-                </div>
+                <a href="/profile" className="profile-link">
+                    <img
+                        src={tempProfile}
+                        alt="Profile"
+                        className="profile-image"
+                    />
+                </a>
             </div>
         </nav>
     );

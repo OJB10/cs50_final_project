@@ -8,4 +8,5 @@ body {
     background-color: var(--light);
     color: var(--text);
     font-family: 'Inter', sans-serif;
+    min-width: 320px; /* Prevent app from shrinking below 320px */
 }
