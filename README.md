@@ -10,22 +10,23 @@ This is a Flask and React-based project designed for managing user-created ticke
 ## Features
 
 ### Backend (Flask)
-- User management system with login and registration
-- Ticket management system for creating, editing, and viewing tickets
-- SQLite database for lightweight storage
-- RESTful API endpoints to communicate with the frontend
-- **Cross-Origin Resource Sharing (CORS)** enabled to allow React frontend to communicate with Flask backend
+- User management system with login and registration.
+- Ticket management system for creating, editing, and viewing tickets.
+- SQLite database for lightweight storage.
+- RESTful API endpoints to communicate with the frontend.
+- **Cross-Origin Resource Sharing (CORS)** enabled to allow React frontend to communicate with Flask backend.
 
 ### Frontend (React)
-- Fully responsive grid system for desktop, tablet, and mobile views
-- Reusable components, including a navigation bar and task cards
-- CSS infrastructure includes centralized colour and typography management
-- **Dynamic fetching of tickets** from the Flask backend using RESTful APIs
+- Fully responsive grid system implemented using Material-UI's Grid and Box components.
+- Reusable components, including a navigation bar (`Navbar`) and task cards (`TaskCard`).
+- **Material-UI Theme System**: Centralized theme management for colours, typography, and responsive design.
+- Integrated light and dark modes with Material-UI's theming.
+- Dynamic fetching of tickets from the Flask backend using RESTful APIs.
 
 ### General
-- Designed with a clear separation of backend and frontend logic
-- Easily extensible for future iterations (e.g., adding authentication, search functionality, or role-based access control)
-- **Integrated Flask and React app for seamless task management**
+- Designed with a clear separation of backend and frontend logic.
+- Easily extensible for future iterations (e.g., adding authentication, search functionality, or role-based access control).
+- **Integrated Flask and React app for seamless task management.**
 
 ## Technical Requirements
 - Python 3.13.1
@@ -35,7 +36,7 @@ This is a Flask and React-based project designed for managing user-created ticke
 - NPM 10.9.2
 
 ## Access
-This is a private repository. Access is restricted and requires explicit authoriation from Ollie Brand.
+This is a private repository. Access is restricted and requires explicit authorization from Ollie Brand.
 
 ## Setup
 
@@ -108,15 +109,14 @@ cs50_final_project/
 │       └── site.db          # SQLite database
 │
 ├── frontend/
-│   ├── public/              # Static files
+│   ├── public/              # Static files (e.g., images)
 │   ├── src/
 │   │   ├── components/      # Reusable React components
-│   │   ├── styles/          # Centralized CSS styles
-│   │   │   ├── colors.css   # Colour palette
-│   │   │   ├── typography.css # Typography styles
-│   │   │   ├── grid.css     # Grid system for responsiveness
-│   │   ├── App.js           # Main React app
-│   │   ├── TaskCard.jsx     # Dynamic task card component
+│   │   │   ├── Navbar.jsx   # Navigation bar component using Material-UI
+│   │   │   ├── TaskCard.jsx # Dynamic task card component
+│   │   ├── theme.js         # Material-UI centralized theme management
+│   │   ├── App.jsx          # Main React app
+│   │   ├── index.js         # Application entry point with Material-UI integration
 │   ├── package.json         # Node.js dependencies
 │   └── README.md            # Frontend-specific documentation
 │
