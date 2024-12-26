@@ -23,11 +23,26 @@ migrate.init_app(app, db)
 
 @app.route('/')
 def home():
+    """
+    A simple endpoint to check if the application is running.
+    
+    Returns:
+        str: A welcome message.
+    """
     return "Hello, Flask!"
 
 
 # Helper method to serialize tickets
 def serialize_ticket(ticket):
+    """
+    Serialize a Ticket object into a dictionary format.
+    
+    Args:
+        ticket (Ticket): The Ticket object to be serialized.
+
+    Returns:
+        dict: A dictionary containing serialized ticket data.
+    """
     return {
         "id": ticket.id,
         "name": ticket.name,
@@ -40,9 +55,14 @@ def serialize_ticket(ticket):
     }
 
 
-# Endpoint to fetch tickets
 @app.route('/api/tickets', methods=['GET'])
 def fetch_tickets():
+    """
+    Fetch all tickets from the database.
+
+    Returns:
+        Response: A JSON response containing a list of all tickets or an error message.
+    """
     try:
         tickets = Ticket.query.all()  # Fetch all tickets from the database
         ticket_list = [serialize_ticket(ticket) for ticket in tickets]
@@ -52,9 +72,16 @@ def fetch_tickets():
         return jsonify({"error": str(e)}), 500
 
 
-# Endpoint to create a new ticket
 @app.route('/api/tickets', methods=['POST'])
 def create_ticket():
+    """
+    Create a new ticket in the database.
+
+    Expects JSON data containing the ticket details.
+
+    Returns:
+        Response: A JSON response containing the created ticket's data or an error message.
+    """
     try:
         data = request.get_json()
         print("Incoming data:", data)  # Debugging line
@@ -80,9 +107,19 @@ def create_ticket():
         return jsonify({"error": str(e)}), 500
 
 
-# Endpoint to update an existing ticket
 @app.route('/api/tickets/<int:ticket_id>', methods=['PUT'])
 def update_ticket(ticket_id):
+    """
+    Update an existing ticket in the database.
+
+    Args:
+        ticket_id (int): The ID of the ticket to update.
+
+    Expects JSON data containing the updated ticket details.
+
+    Returns:
+        Response: A JSON response containing the updated ticket's data or an error message.
+    """
     try:
         ticket = Ticket.query.get(ticket_id)
         if not ticket:
@@ -94,7 +131,7 @@ def update_ticket(ticket_id):
         ticket.description = data.get('description', ticket.description)
         ticket.status = data.get('status', ticket.status)
         ticket.priority = data.get('priority', ticket.priority)
-        print(data) # Debugging line
+        print(data)  # Debugging line
         ticket.due_date = datetime.strptime(data['due_date'], "%Y-%m-%d") if data.get('due_date') else ticket.due_date
         db.session.commit()
         return jsonify(serialize_ticket(ticket)), 200
@@ -103,9 +140,17 @@ def update_ticket(ticket_id):
         return jsonify({"error": str(e)}), 500
 
 
-# Endpoint to delete a ticket
 @app.route('/api/tickets/<int:ticket_id>', methods=['DELETE'])
 def delete_ticket(ticket_id):
+    """
+    Delete a ticket from the database.
+
+    Args:
+        ticket_id (int): The ID of the ticket to delete.
+
+    Returns:
+        Response: A JSON response confirming deletion or an error message.
+    """
     try:
         ticket = Ticket.query.get(ticket_id)
         if not ticket:
@@ -120,6 +165,10 @@ def delete_ticket(ticket_id):
 
 
 if __name__ == '__main__':
+    """
+    Main entry point for the Flask application.
+    Initializes the database and starts the Flask development server.
+    """
     # Use app context to create the database
     with app.app_context():
         db.create_all()  # This creates the database file

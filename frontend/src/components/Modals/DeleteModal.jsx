@@ -9,6 +9,14 @@ import {
   Box,
 } from "@mui/material";
 
+/**
+ * A modal component to confirm the deletion of a ticket.
+ *
+ * @param {boolean} open - Controls whether the modal is visible.
+ * @param {function} onClose - Function to handle the action of closing the modal.
+ * @param {function} onConfirm - Function to handle the confirmation action.
+ * @returns {JSX.Element} The rendered DeleteModal component.
+ */
 const DeleteModal = ({ open, onClose, onConfirm }) => {
   return (
     <Dialog

@@ -1,32 +1,34 @@
 # Dash Ticketing
+
 A proprietary ticket management system by Ollie Brand.
 
 ## Confidentiality Notice
-This documentation and associated source code contain confidential and proprietary information. Unauthorized reproduction, distribution, or disclosure is strictly prohibited.
+
+This documentation and associated source code are confidential and proprietary to Ollie Brand. Unauthorized reproduction, distribution, or disclosure is strictly prohibited. Access is limited to authorized individuals, including Harvard CS50x staff for academic evaluation.
 
 ## CS50 Final Project Description
+
 This is a Flask and React-based project designed for managing user-created tickets and providing a streamlined interface for task management. The app is built with responsiveness and scalability in mind.
 
 ## Features
 
-### Backend (Flask)
-- User management system with login and registration.
-- Ticket management system for creating, editing, and viewing tickets.
-- SQLite database for lightweight storage.
-- RESTful API endpoints to communicate with the frontend.
-- **Cross-Origin Resource Sharing (CORS)** enabled to allow React frontend to communicate with Flask backend.
+### Backend Features
+- User authentication with login and registration
+- Ticket management system for creating, editing, and viewing tickets
+- SQLite database for lightweight storage
+- RESTful API endpoints for frontend communication
+- CORS enabled for React and Flask integration
 
-### Frontend (React)
-- Fully responsive grid system implemented using Material-UI's Grid and Box components.
-- Reusable components, including a navigation bar (`Navbar`) and task cards (`TaskCard`).
-- **Material-UI Theme System**: Centralized theme management for colours, typography, and responsive design.
-- Integrated light and dark modes with Material-UI's theming.
-- Dynamic fetching of tickets from the Flask backend using RESTful APIs.
+### Frontend Features
+- Fully responsive grid system using Material-UI's Grid and Box components
+- Dynamic fetching and displaying of tickets via RESTful APIs
+- Centralized theme system for colours, typography, and responsiveness
+- Integrated light/dark mode toggle for user customization
 
 ### General
-- Designed with a clear separation of backend and frontend logic.
-- Easily extensible for future iterations (e.g., adding authentication, search functionality, or role-based access control).
-- **Integrated Flask and React app for seamless task management.**
+- Clear separation of backend and frontend logic
+- Easily extensible for future iterations (e.g., adding authentication, search functionality, or role-based access control)
+- Integrated Flask and React app for seamless task management
 
 ## Technical Requirements
 - Python 3.13.1
@@ -36,6 +38,7 @@ This is a Flask and React-based project designed for managing user-created ticke
 - NPM 10.9.2
 
 ## Access
+
 This is a private repository. Access is restricted and requires explicit authorization from Ollie Brand.
 
 ## Setup
@@ -90,9 +93,9 @@ This is a private repository. Access is restricted and requires explicit authori
 
 ## Running the Application
 
-- Open your browser and navigate to:
-  - Flask backend API: [http://127.0.0.1:5000/api/tickets](http://127.0.0.1:5000/api/tickets)
-  - React frontend: [http://localhost:3000](http://localhost:3000)
+Open your browser and navigate to:
+- Flask backend API: [http://127.0.0.1:5000/api/tickets](http://127.0.0.1:5000/api/tickets)
+- React frontend: [http://localhost:3000](http://localhost:3000)
 
 ## File Structure
 
@@ -121,11 +124,22 @@ cs50_final_project/
 │   └── README.md            # Frontend-specific documentation
 │
 ├── LICENSE                  # Proprietary License
-└── README.md                # Project overview (this file)
+└── README.md               # Project overview (this file)
 ```
+
+## Troubleshooting
+
+- Ensure no other application is using ports 5000 or 3000
+- If npm start fails, try deleting node_modules and running npm install again
+
+## Future Enhancements
+
+- Implementing search and filtering functionality for tickets
+- Adding authentication and role-based access control
+- Introducing pagination for large datasets
 
 ## License
 
 This project is proprietary software owned by Ollie Brand. Copyright (c) 2024. All rights reserved.
 
-A limited license is granted solely to Harvard CS50x staff for project evaluation and academic assessment purposes. See the [LICENSE](/LICENSE) file for details.
+A limited license is granted solely to Harvard CS50x staff for project evaluation and academic assessment purposes. See the LICENSE file for details.

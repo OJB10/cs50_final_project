@@ -9,10 +9,25 @@ import {
   Grid,
 } from "@mui/material";
 
+/**
+ * TicketModal Component
+ * 
+ * A modal dialog component for creating or editing a ticket.
+ * It displays a form with fields for the ticket's name, description, and due date.
+ * Handles form submission and provides callbacks for saving and closing the modal.
+ * 
+ * @param {boolean} open - Determines if the modal is open.
+ * @param {function} onClose - Callback to close the modal.
+ * @param {function} onSave - Callback to save the form data.
+ * @param {object} initialData - Initial form data for the modal (used in edit mode).
+ * @param {boolean} isEdit - Flag to indicate if the modal is in edit mode.
+ */
 const TicketModal = ({ open, onClose, onSave, initialData = {}, isEdit = false }) => {
   const [formData, setFormData] = useState(initialData);
 
-  // Reset form data whenever the modal opens or initialData changes
+  /**
+   * Effect to reset form data whenever the modal opens or initialData changes.
+   */
   useEffect(() => {
     if (initialData) {
       const formattedData = {
@@ -27,12 +42,20 @@ const TicketModal = ({ open, onClose, onSave, initialData = {}, isEdit = false }
     }
   }, [initialData, open]);
 
-  // Handle field changes
+  /**
+   * Handles input field changes and updates the formData state.
+   * 
+   * @param {object} e - Event object from the input field.
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  /**
+   * Handles form submission by invoking the onSave callback
+   * and closing the modal via onClose callback.
+   */
   const handleSubmit = () => {
     onSave(formData);
     onClose();

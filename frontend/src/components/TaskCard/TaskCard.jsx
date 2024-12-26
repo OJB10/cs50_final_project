@@ -6,7 +6,6 @@ import {
   Chip,
   CardActions,
   Button,
-  Grid,
   Box,
 } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
@@ -14,7 +13,32 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
-const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete  }) => {
+/**
+ * TaskCard Component
+ * 
+ * This component displays a card representing a task, including its name, description,
+ * status, due date, and action buttons for editing and deleting the task.
+ * 
+ * Props:
+ * @param {string} name - The name of the task.
+ * @param {string} description - A short description of the task.
+ * @param {string} status - The current status of the task (e.g., "In Progress").
+ * @param {string} dueDate - The due date of the task, stored in ISO format (YYYY-MM-DD).
+ * @param {function} onEdit - Callback function triggered when the "Edit" button is clicked.
+ * @param {function} onDelete - Callback function triggered when the "Delete" button is clicked.
+ * 
+ * @returns {JSX.Element} The rendered task card.
+ */
+const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete }) => {
+  // Format the due date using the user's locale settings
+  const formattedDueDate = dueDate
+    ? new Date(dueDate).toLocaleDateString(undefined, {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+    : "No due date";
+
   return (
     <Card
       sx={{
@@ -24,16 +48,16 @@ const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete  }) => 
         borderColor: "divider",
         backgroundColor: "background.paper",
         boxShadow: 2,
-        height: "100%", // Consistent card height
+        height: "100%", // Ensures consistent card height
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between", // Align content vertically
+        justifyContent: "space-between", // Aligns content vertically
       }}
     >
       <CardContent sx={{ paddingBottom: "8px !important" }}>
-        {/* Chip in the top-right */}
+        {/* Status Chip displayed at the top-right corner */}
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Box /> {/* Spacer to align the Chip to the right */}
+          <Box /> {/* Empty spacer to align the Chip to the right */}
           <Chip
             label={
               <Box display="flex" alignItems="center">
@@ -46,7 +70,7 @@ const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete  }) => 
           />
         </Box>
 
-        {/* Title */}
+        {/* Task Title */}
         <Typography
           variant="h6"
           component="div"
@@ -55,13 +79,13 @@ const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete  }) => 
           {name}
         </Typography>
 
-        {/* Description */}
+        {/* Task Description */}
         <Typography variant="body2" color="text.secondary">
           {description}
         </Typography>
       </CardContent>
 
-      {/* Actions and Due Date */}
+      {/* Footer: Action Buttons and Due Date */}
       <CardActions
         sx={{
           display: "flex",
@@ -70,14 +94,14 @@ const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete  }) => 
           paddingTop: 1,
         }}
       >
-        {/* Edit and Delete Buttons */}
+        {/* Action Buttons: Edit and Delete */}
         <Box display="flex" gap={1}>
           <Button
             startIcon={<EditIcon />}
             size="small"
             variant="outlined"
             color="primary"
-            onClick={onEdit} // Trigger edit action
+            onClick={onEdit} // Trigger the edit callback
           >
             Edit
           </Button>
@@ -86,13 +110,13 @@ const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete  }) => 
             size="small"
             variant="contained"
             color="error"
-            onClick={onDelete} // Trigger delete action
+            onClick={onDelete} // Trigger the delete callback
           >
             Delete
           </Button>
         </Box>
 
-        {/* Due Date */}
+        {/* Due Date Display */}
         <Typography
           variant="caption"
           color="text.secondary"
@@ -102,7 +126,7 @@ const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete  }) => 
           }}
         >
           <AccessTimeIcon fontSize="small" sx={{ marginRight: 0.5 }} />
-          {dueDate}
+          {formattedDueDate}
         </Typography>
       </CardActions>
     </Card>

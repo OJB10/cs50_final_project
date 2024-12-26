@@ -1,6 +1,15 @@
 import React from "react";
 import { AppBar, Toolbar, Grid, TextField, Box, Avatar } from "@mui/material";
 
+/**
+ * Navbar Component
+ * 
+ * This component represents the navigation bar at the top of the page.
+ * It includes a logo, a search bar, and a profile avatar.
+ * The navigation bar is fixed to the top of the viewport.
+ * 
+ * @returns {JSX.Element} The Navbar component.
+ */
 const Navbar = () => {
   return (
     <AppBar
@@ -12,6 +21,7 @@ const Navbar = () => {
     >
       <Toolbar>
         <Grid container alignItems="center" spacing={2}>
+          
           {/* Logo Section */}
           <Grid item xs={6} sm={3} md={2}>
             <Box display="flex" alignItems="center" justifyContent="flex-start">
