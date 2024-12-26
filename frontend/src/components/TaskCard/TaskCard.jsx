@@ -14,7 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
-const TaskCard = ({ name, description, status, dueDate }) => {
+const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete  }) => {
   return (
     <Card
       sx={{
@@ -77,6 +77,7 @@ const TaskCard = ({ name, description, status, dueDate }) => {
             size="small"
             variant="outlined"
             color="primary"
+            onClick={onEdit} // Trigger edit action
           >
             Edit
           </Button>
@@ -85,6 +86,7 @@ const TaskCard = ({ name, description, status, dueDate }) => {
             size="small"
             variant="contained"
             color="error"
+            onClick={onDelete} // Trigger delete action
           >
             Delete
           </Button>
