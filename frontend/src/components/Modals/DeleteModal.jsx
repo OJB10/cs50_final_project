@@ -6,22 +6,49 @@ import {
   DialogActions,
   Button,
   Typography,
+  Box,
 } from "@mui/material";
 
 const DeleteModal = ({ open, onClose, onConfirm }) => {
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Are you sure?</DialogTitle>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+      sx={{
+        ".MuiDialog-paper": {
+          margin: "0 auto",
+          padding: 2,
+          borderRadius: 2,
+          border: 1,
+          borderColor: "divider",
+          backgroundColor: "background.paper",
+        },
+      }}
+    >
+      <DialogTitle sx={{ textAlign: "center", fontWeight: "bold" }}>
+        Are you sure?
+      </DialogTitle>
       <DialogContent>
-        <Typography>
-          You are about to delete this ticket. Once it has gone, you won’t be able to recover it.
-        </Typography>
+        <Box sx={{ textAlign: "center", marginBottom: 2 }}>
+          <Typography variant="body1">
+            You are about to delete this ticket. Once it has gone, you won’t be
+            able to recover it.
+          </Typography>
+        </Box>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="warning">
+      <DialogActions
+        sx={{
+          justifyContent: "flex-end", // Align buttons to the right
+          gap: 1, // Add spacing between buttons
+          paddingRight: 2, // Adjust padding for better alignment
+        }}
+      >
+        <Button onClick={onClose} color="warning" variant="outlined">
           Cancel
         </Button>
-        <Button onClick={onConfirm} color="error">
+        <Button onClick={onConfirm} color="error" variant="contained">
           Delete
         </Button>
       </DialogActions>

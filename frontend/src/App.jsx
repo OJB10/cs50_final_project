@@ -64,28 +64,28 @@ const App = () => {
   // Save or edit a ticket
   const saveTicket = async (ticketData) => {
     try {
-      // Ensure the dueDate is properly formatted before sending it to the backend
       const ticketPayload = {
         ...ticketData,
-        dueDate: ticketData.dueDate ? new Date(ticketData.dueDate).toISOString().split("T")[0] : null,
+        // Convert the local date to ISO format for the backend
+        due_date: ticketData.dueDate
+          ? new Date(ticketData.dueDate).toISOString().split("T")[0]
+          : null,
       };
   
       if (ticketData.id) {
-        // Edit ticket
         await fetch(`http://127.0.0.1:5000/api/tickets/${ticketData.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(ticketPayload),
         });
       } else {
-        // Create ticket
         await fetch("http://127.0.0.1:5000/api/tickets", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(ticketPayload),
         });
       }
-      fetchTasks(); // Refresh tasks
+      fetchTasks();
       setTicketModalOpen(false);
     } catch (error) {
       console.error("Error saving ticket:", error);

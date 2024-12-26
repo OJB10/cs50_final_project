@@ -14,9 +14,20 @@ const TicketModal = ({ open, onClose, onSave, initialData = {}, isEdit = false }
 
   // Reset form data whenever the modal opens or initialData changes
   useEffect(() => {
-    setFormData(initialData || {});
+    if (initialData) {
+      const formattedData = {
+        ...initialData,
+        dueDate: initialData.dueDate
+          ? new Date(initialData.dueDate).toISOString().split("T")[0]
+          : "",
+      };
+      setFormData(formattedData);
+    } else {
+      setFormData({});
+    }
   }, [initialData, open]);
 
+  // Handle field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -35,11 +46,24 @@ const TicketModal = ({ open, onClose, onSave, initialData = {}, isEdit = false }
       fullWidth
       sx={{
         ".MuiDialog-paper": {
-          maxWidth: "100%",
+          margin: "0 auto",
+          padding: 2,
+          borderRadius: 2,
+          border: 1,
+          borderColor: "divider",
+          backgroundColor: "background.paper",
+          width: {
+            xs: "90%", // Small screens
+            sm: "80%", // Tablets
+            md: "50%", // Desktop, central 6 columns
+          },
+          maxWidth: "none", // Disable max width constraint
         },
       }}
     >
-      <DialogTitle>{isEdit ? "Edit Ticket" : "Create New Ticket"}</DialogTitle>
+      <DialogTitle sx={{ textAlign: "center", fontWeight: "bold" }}>
+        {isEdit ? "Edit Ticket" : "Create New Ticket"}
+      </DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -75,11 +99,17 @@ const TicketModal = ({ open, onClose, onSave, initialData = {}, isEdit = false }
           </Grid>
         </Grid>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="warning">
+      <DialogActions
+        sx={{
+          justifyContent: "flex-end", // Align buttons to the right
+          gap: 1, // Add spacing between buttons
+          paddingRight: 2, // Optional: adjust padding for better spacing
+        }}
+      >
+        <Button onClick={onClose} color="warning" variant="outlined">
           Cancel
         </Button>
-        <Button onClick={handleSubmit} color="success">
+        <Button onClick={handleSubmit} color="success" variant="contained">
           {isEdit ? "Save Changes" : "Create"}
         </Button>
       </DialogActions>

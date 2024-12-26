@@ -57,6 +57,7 @@ def fetch_tickets():
 def create_ticket():
     try:
         data = request.get_json()
+        print("Incoming data:", data)  # Debugging line
         # Validate required fields
         if not data.get('name') or not data.get('description'):
             return jsonify({"error": "Name and description are required."}), 400
@@ -93,6 +94,7 @@ def update_ticket(ticket_id):
         ticket.description = data.get('description', ticket.description)
         ticket.status = data.get('status', ticket.status)
         ticket.priority = data.get('priority', ticket.priority)
+        print(data) # Debugging line
         ticket.due_date = datetime.strptime(data['due_date'], "%Y-%m-%d") if data.get('due_date') else ticket.due_date
         db.session.commit()
         return jsonify(serialize_ticket(ticket)), 200
