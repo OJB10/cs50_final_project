@@ -110,3 +110,47 @@ def logout():
     response.set_cookie('session', '', expires=0)  # Invalidate session cookie
     print("Session cleared")  # Debug log
     return response
+
+@user_bp.route('/update', methods=['PUT'])
+@login_required
+def update_user():
+    """
+    Update the user's name and/or password.
+
+    Expects:
+        JSON body with `name` and/or `password`.
+
+    Returns:
+        200: User details updated successfully.
+        400: Validation error.
+        500: Internal server error.
+    """
+    try:
+        data = request.get_json()
+        user_id = session.get("user_id")  # Get the user ID from the session
+        user = User.query.get(user_id)
+
+        if not user:
+            return jsonify({"error": "User not found."}), 404
+
+        # Update name if provided
+        if "name" in data:
+            new_name = data["name"]
+            if not new_name.strip():
+                return jsonify({"error": "Name cannot be empty."}), 400
+            user.name = new_name
+
+        # Update password if provided
+        if "password" in data:
+            new_password = data["password"]
+            if len(new_password) < 8:
+                return jsonify({"error": "Password must be at least 8 characters long."}), 400
+            user.set_password(new_password)
+
+        # Commit changes to the database
+        db.session.commit()
+        return jsonify({"message": "User details updated successfully."}), 200
+
+    except Exception as e:
+        print(f"Error during user update: {e}")
+        return jsonify({"error": "An error occurred while updating user details."}), 500
