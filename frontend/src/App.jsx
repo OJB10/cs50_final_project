@@ -79,6 +79,8 @@ const handleLogout = async () => {
     window.location.href = "/login";
   }
 };
+// Pass handleLogout to Navbar as onLogout
+<Navbar user={user} onLogout={handleLogout} />
 
 /**
  * A component to protect routes and redirect unauthenticated users to the login page.
@@ -113,7 +115,6 @@ const fetchTasks = async () => {
   try {
     console.log('Fetching tasks...');
     console.log('Current cookies:', document.cookie);
-    console.log('DOC:', document);
     
     const response = await fetch("http://127.0.0.1:5000/api/tickets", {
       method: 'GET',
@@ -260,7 +261,7 @@ return (
           element={
             <ProtectedRoute>
               <Box>
-                <Navbar />
+                <Navbar user={user} onLogout={handleLogout} />
                 <Box sx={{ marginTop: "64px", padding: 2 }}>
                   <Grid container spacing={2} justifyContent="center">
                     {tasks.length > 0 ? (
