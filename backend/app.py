@@ -1,176 +1,146 @@
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, redirect, url_for, session, request, jsonify, make_response
 from flask_cors import CORS
-from datetime import datetime
+from flask_session import Session
 from extensions import db, migrate
-from models import User, Ticket  # Import your models
-
-app = Flask(__name__)
-
-CORS(app)
-
-# Get the absolute path for site.db
-db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'site.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'  # Absolute path for the database file
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Suppress warning
-
-print(f"Database path resolved to: {db_path}")  # Debugging line
-
-# Initialize extensions
-db.init_app(app)
-migrate.init_app(app, db)
+from routes import register_blueprints
+from decorators import login_required
+from datetime import timedelta
 
 
-@app.route('/')
-def home():
+def create_app():
     """
-    A simple endpoint to check if the application is running.
+    Factory function to create and configure the Flask application.
+
+    Returns:
+        Flask: The configured Flask application.
+    """
+    app = Flask(__name__)
+
+    # Basic configuration
+    app.config.update(
+        SECRET_KEY="your-secret-key", # Change this in production
+        SESSION_TYPE="filesystem", # Consider using "redis" for production
+        PERMANENT_SESSION_LIFETIME=timedelta(days=1),
+        SESSION_FILE_DIR="./flask_session",  # Explicitly set session file location
+        SESSION_FILE_THRESHOLD=500  # Number of sessions stored in memory
+    )
+
+    # Cookie configuration
+    app.config.update(
+        SESSION_COOKIE_NAME="session",
+        SESSION_COOKIE_DOMAIN=None,  # Allow all domains
+        SESSION_COOKIE_PATH="/",
+        SESSION_COOKIE_HTTPONLY=True,  # 
+        SESSION_COOKIE_SECURE="None",  # Set to True in production with HTTPS
+        SESSION_COOKIE_SAMESITE="None" # Ensure compatibility
+    )
+
+    # CORS configuration
+    app.config.update(
+        CORS_HEADERS="Content-Type",
+        CORS_RESOURCES={
+            r"/api/*": {
+                "origins": ["http://localhost:3000"],
+                "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+                "allow_headers": ["Content-Type"],
+                "supports_credentials": True,
+                "expose_headers": ["Set-Cookie"]
+            }
+        }
+    )
+
+    # Initialize the Flask session
+    Session(app)
+
+    # Ensure permanent sessions
+    @app.before_request
+    def make_session_permanent():
+        session.permanent = True
     
-    Returns:
-        str: A welcome message.
-    """
-    return "Hello, Flask!"
+    # Apply CORS headers to all responses
+    @app.after_request
+    def apply_cors_headers(response):
+        response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Access-Control-Allow-Headers"] = "content-type"
+        response.headers["Access-Control-Allow-Methods"] = "DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT"
+        return response
 
+    # Configure the SQLite database
+    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'site.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'  # SQLite database path
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    print(f"Database path resolved to: {db_path}")  # Debugging line
 
-# Helper method to serialize tickets
-def serialize_ticket(ticket):
-    """
-    Serialize a Ticket object into a dictionary format.
-    
-    Args:
-        ticket (Ticket): The Ticket object to be serialized.
+    # Initialize Flask extensions
+    db.init_app(app)
+    migrate.init_app(app, db)
 
-    Returns:
-        dict: A dictionary containing serialized ticket data.
-    """
-    return {
-        "id": ticket.id,
-        "name": ticket.name,
-        "description": ticket.description,
-        "created_at": ticket.created_at.strftime("%Y-%m-%d %H:%M:%S") if ticket.created_at else None,
-        "due_date": ticket.due_date.strftime("%Y-%m-%d") if ticket.due_date else None,
-        "status": ticket.status,
-        "priority": ticket.priority,
-        "author_id": ticket.author_id,
-    }
+    # Register blueprints for modular route management
+    register_blueprints(app)
 
+    # Debugging: Print all routes
+    for rule in app.url_map.iter_rules():
+        print(f"{rule.endpoint}: {rule.rule}")
 
-@app.route('/api/tickets', methods=['GET'])
-def fetch_tickets():
-    """
-    Fetch all tickets from the database.
+    @app.route('/')
+    def home():
+        """
+        A simple endpoint to check if the application is running.
 
-    Returns:
-        Response: A JSON response containing a list of all tickets or an error message.
-    """
-    try:
-        tickets = Ticket.query.all()  # Fetch all tickets from the database
-        ticket_list = [serialize_ticket(ticket) for ticket in tickets]
-        return jsonify(ticket_list), 200
-    except Exception as e:
-        print(f"Error occurred: {e}")  # Debugging line
-        return jsonify({"error": str(e)}), 500
+        Returns:
+            str: A welcome message.
+        """
+        return "Hello, Flask!"
+      
+    # Add this route to test CORS
+    @app.route('/api/test-cors', methods=['GET'])
+    def test_cors():
+        return jsonify({
+            "message": "CORS is working!",
+            "session": dict(session)
+    })
 
+    # Debugging route to check session state
+    @app.route('/api/debug/session', methods=['GET'])
+    def debug_session():
+        print("Debug endpoint accessed")
+        print(f"Current session: {dict(session)}")
+        print(f"Request cookies: {dict(request.cookies)}")
+        return jsonify({
+            "session": dict(session),
+            "cookies": dict(request.cookies),
+            "headers": dict(request.headers)
+        })
 
-@app.route('/api/tickets', methods=['POST'])
-def create_ticket():
-    """
-    Create a new ticket in the database.
+    @app.route('/api/debug/cookies', methods=['GET'])
+    def debug_cookies():
+        return jsonify({
+            "cookies": dict(request.cookies),
+            "session_cookie": request.cookies.get("session"),
+            "headers": dict(request.headers)
+    })
 
-    Expects JSON data containing the ticket details.
+    # Debugging route to clear the session
+    @app.route('/api/debug/logout', methods=['POST'])
+    @login_required
+    def debug_logout():
+        session.clear()  # Clear all session data
+        response = make_response(jsonify({"message": "Session cleared"}))
+        response.set_cookie('session', '', expires=0)  # Invalidate the session cookie
+        print("Session cleared manually.")  # Debugging log
+        return response
 
-    Returns:
-        Response: A JSON response containing the created ticket's data or an error message.
-    """
-    try:
-        data = request.get_json()
-        print("Incoming data:", data)  # Debugging line
-        # Validate required fields
-        if not data.get('name') or not data.get('description'):
-            return jsonify({"error": "Name and description are required."}), 400
-
-        # Create a new ticket
-        new_ticket = Ticket(
-            name=data['name'],
-            description=data['description'],
-            status=data.get('status', 'To be done'),
-            priority=data.get('priority', 'Low'),
-            due_date=datetime.strptime(data['due_date'], "%Y-%m-%d") if data.get('due_date') else None,
-            created_at=datetime.utcnow(),
-            author_id=data.get('author_id'),  # Optional
-        )
-        db.session.add(new_ticket)
-        db.session.commit()
-        return jsonify(serialize_ticket(new_ticket)), 201
-    except Exception as e:
-        print(f"Error occurred: {e}")  # Debugging line
-        return jsonify({"error": str(e)}), 500
-
-
-@app.route('/api/tickets/<int:ticket_id>', methods=['PUT'])
-def update_ticket(ticket_id):
-    """
-    Update an existing ticket in the database.
-
-    Args:
-        ticket_id (int): The ID of the ticket to update.
-
-    Expects JSON data containing the updated ticket details.
-
-    Returns:
-        Response: A JSON response containing the updated ticket's data or an error message.
-    """
-    try:
-        ticket = Ticket.query.get(ticket_id)
-        if not ticket:
-            return jsonify({"error": "Ticket not found."}), 404
-
-        data = request.get_json()
-        # Update fields
-        ticket.name = data.get('name', ticket.name)
-        ticket.description = data.get('description', ticket.description)
-        ticket.status = data.get('status', ticket.status)
-        ticket.priority = data.get('priority', ticket.priority)
-        print(data)  # Debugging line
-        ticket.due_date = datetime.strptime(data['due_date'], "%Y-%m-%d") if data.get('due_date') else ticket.due_date
-        db.session.commit()
-        return jsonify(serialize_ticket(ticket)), 200
-    except Exception as e:
-        print(f"Error occurred: {e}")  # Debugging line
-        return jsonify({"error": str(e)}), 500
-
-
-@app.route('/api/tickets/<int:ticket_id>', methods=['DELETE'])
-def delete_ticket(ticket_id):
-    """
-    Delete a ticket from the database.
-
-    Args:
-        ticket_id (int): The ID of the ticket to delete.
-
-    Returns:
-        Response: A JSON response confirming deletion or an error message.
-    """
-    try:
-        ticket = Ticket.query.get(ticket_id)
-        if not ticket:
-            return jsonify({"error": "Ticket not found."}), 404
-
-        db.session.delete(ticket)
-        db.session.commit()
-        return jsonify({"message": "Ticket deleted successfully."}), 200
-    except Exception as e:
-        print(f"Error occurred: {e}")  # Debugging line
-        return jsonify({"error": str(e)}), 500
+    return app
 
 
 if __name__ == '__main__':
-    """
-    Main entry point for the Flask application.
-    Initializes the database and starts the Flask development server.
-    """
-    # Use app context to create the database
+    app = create_app()
     with app.app_context():
-        db.create_all()  # This creates the database file
+        # Ensure database tables are created
+        db.create_all()
         print("Database and tables created.")  # Debugging line
+
+    # Start the Flask development server
     app.run(debug=True)

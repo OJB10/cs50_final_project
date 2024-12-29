@@ -8,18 +8,30 @@ This documentation and associated source code are confidential and proprietary t
 
 ## CS50 Final Project Description
 
-This is a Flask and React-based project designed for managing user-created tickets and providing a streamlined interface for task management. The app is built with responsiveness and scalability in mind.
+This is a Flask and React-based project designed for managing user-created tickets and providing a streamlined interface for task management. The app is built with responsiveness, security, and scalability in mind, featuring robust user authentication and protected routes.
 
 ## Features
 
+### Authentication & Security
+- Secure user authentication system with session management
+- Protected routes requiring user authentication
+- Session-based cookie management for secure data transfer
+- Comprehensive CORS configuration for secure cross-origin requests
+- User registration and login functionality
+- Secure logout mechanism
+
 ### Backend Features
+- Modular route management using Flask Blueprints
+- Protected API endpoints with login_required decorator
 - User authentication with login and registration
 - Ticket management system for creating, editing, and viewing tickets
 - SQLite database for lightweight storage
 - RESTful API endpoints for frontend communication
-- CORS enabled for React and Flask integration
+- CORS enabled for secure React and Flask integration
 
 ### Frontend Features
+- Secure authentication integration with backend
+- Protected route management for authenticated users
 - Fully responsive grid system using Material-UI's Grid and Box components
 - Dynamic fetching and displaying of tickets via RESTful APIs
 - Centralized theme system for colours, typography, and responsiveness
@@ -27,11 +39,13 @@ This is a Flask and React-based project designed for managing user-created ticke
 
 ### General
 - Clear separation of backend and frontend logic
-- Easily extensible for future iterations (e.g., adding authentication, search functionality, or role-based access control)
-- Integrated Flask and React app for seamless task management
+- Modular architecture using blueprints for improved code organization
+- Secure cross-origin resource sharing (CORS) configuration
+- Session-based authentication system
+- Easily extensible for future iterations
 
 ## Technical Requirements
-- Python 3.13.1
+- Python 3.11.5
 - Flask 3.1.0
 - SQLite 3.47.2
 - Node.js 19.0.0
@@ -39,7 +53,7 @@ This is a Flask and React-based project designed for managing user-created ticke
 
 ## Access
 
-This is a private repository. Access is restricted and requires explicit authorization from Ollie Brand.
+This is a private repository that is temporarily public for CS50x submission purposes. Usage requires explicit authorization from Ollie Brand.
 
 ## Setup
 
@@ -93,9 +107,22 @@ This is a private repository. Access is restricted and requires explicit authori
 
 ## Running the Application
 
-Open your browser and navigate to:
-- Flask backend API: [http://127.0.0.1:5000/api/tickets](http://127.0.0.1:5000/api/tickets)
-- React frontend: [http://localhost:3000](http://localhost:3000)
+1. Start both backend and frontend servers as described in the setup.
+2. Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
+3. Register a new account or log in with existing credentials
+4. Access the ticket management system through the authenticated interface
+
+### API Endpoints
+- Authentication:
+  - POST `/api/users/register`: Register a new user
+  - POST `/api/users/login`: User login
+  - POST `/api/users/logout`: User logout
+
+- Tickets (Protected Routes):
+  - GET `/api/tickets`: Fetch all tickets
+  - POST `/api/tickets`: Create a new ticket
+  - PUT `/api/tickets/<id>`: Update a ticket
+  - DELETE `/api/tickets/<id>`: Delete a ticket
 
 ## File Structure
 
@@ -104,39 +131,57 @@ cs50_final_project/
 │
 ├── backend/
 │   ├── app.py               # Main Flask application
+│   ├── decorators.py        # Authentication decorators
 │   ├── models.py            # Database models for User and Ticket
 │   ├── migrations/          # Database migrations folder
+│   ├── routes/
+│   │   ├── __init__.py      # Contains blueprint registration
+│   │   ├── ticket_routes.py # All ticket-related routes
+│   │   └── user_routes.py   # All user-related routes
+│   └── utils/
+│       ├── __init__.py      # Not in use yet
+│       ├── auth.py          # Not in use yet
+│       └── validators.py    # Not in use yet
 │   ├── venv/                # Virtual environment (not included in Git)
 │   ├── requirements.txt     # Python dependencies
-│   └── instance/
-│       └── site.db          # SQLite database
+│   └── site.db              # SQLite database
 │
 ├── frontend/
-│   ├── public/              # Static files (e.g., images)
+│   ├── public/              # Static files
 │   ├── src/
 │   │   ├── components/      # Reusable React components
-│   │   │   ├── Navbar.jsx   # Navigation bar component using Material-UI
-│   │   │   ├── TaskCard.jsx # Dynamic task card component
-│   │   ├── theme.js         # Material-UI centralized theme management
+│   │   │   ├── Navbar/      # Navigation bar component
+│   │   │   ├── Buttons/     # Button components
+│   │   │   ├── Modals/      # Modal components
+│   │   │   ├── UserManagement/  # Auth-related components
+│   │   │   └── TaskCard.jsx # Task card component
+│   │   ├── layouts/
+│   │   │   └── Layout.jsx   # Main layout component
+│   │   ├── theme.js         # Material-UI theme management
 │   │   ├── App.jsx          # Main React app
-│   │   ├── index.js         # Application entry point with Material-UI integration
+│   │   └── index.js         # Application entry point
 │   ├── package.json         # Node.js dependencies
-│   └── README.md            # Frontend-specific documentation
+│   └── README.md            # Frontend documentation
 │
 ├── LICENSE                  # Proprietary License
-└── README.md               # Project overview (this file)
+└── README.md               # Project overview
 ```
 
 ## Troubleshooting
 
 - Ensure no other application is using ports 5000 or 3000
 - If npm start fails, try deleting node_modules and running npm install again
+- Clear browser cookies and cache if experiencing authentication issues
+- Check CORS settings if experiencing API connection issues
 
 ## Future Enhancements
 
+- Enhanced user profile management
+- Password reset functionality
+- Adding role-based access control
 - Implementing search and filtering functionality for tickets
-- Adding authentication and role-based access control
 - Introducing pagination for large datasets
+- Email notifications for ticket updates
 
 ## License
 
