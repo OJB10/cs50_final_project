@@ -2,20 +2,18 @@
 
 A proprietary ticket management system by Ollie Brand.
 
-## Confidentiality Notice
-
-This documentation and associated source code are confidential and proprietary to Ollie Brand. Unauthorized reproduction, distribution, or disclosure is strictly prohibited. Access is limited to authorized individuals, including Harvard CS50x staff for academic evaluation.
+Video Demo: https://youtu.be/wmf2w0Aq4_s
 
 ## CS50 Final Project Description
 
-This is a Flask and React-based project designed for managing user-created tickets and providing a streamlined interface for task management. The app is built with responsiveness, security, and scalability in mind, featuring robust user authentication and protected routes.
+This is a Flask and React-based project designed for managing user-created tickets and providing a streamlined interface for task management. The app is built with responsiveness, security, and scalability in mind, featuring robust user authentication and AsyncRoutes.
 
 ## Features
 
 ### Authentication & Security
 
 - Secure user authentication system with session management
-- Protected routes requiring user authentication
+- Async Routes requiring user authentication
 - Session-based cookie management for secure data transfer
 - Comprehensive CORS configuration for secure cross-origin requests
 - User registration and login functionality
@@ -135,7 +133,7 @@ This is a private repository that is temporarily public for CS50x submission pur
   - POST `/api/users/login`: User login
   - POST `/api/users/logout`: User logout
 
-- Tickets (Protected Routes):
+- Tickets (Async Routes):
 
   - GET `/api/tickets`: Fetch all tickets
   - POST `/api/tickets`: Create a new ticket

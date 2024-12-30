@@ -79,6 +79,7 @@ const useAuth = () => {
       });
       setUser(null);
       localStorage.removeItem("user");
+      window.location.assign("/login"); // Redirect to login page
     } catch (error) {
       console.error("Error logging out:", error);
     }
