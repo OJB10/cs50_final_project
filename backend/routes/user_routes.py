@@ -154,3 +154,11 @@ def update_user():
     except Exception as e:
         print(f"Error during user update: {e}")
         return jsonify({"error": "An error occurred while updating user details."}), 500
+    
+@user_bp.route('/session', methods=['GET'])
+def verify_session():
+    if 'user_id' in session:
+        user = User.query.get(session['user_id'])
+        if user:
+            return jsonify({"id": user.id, "name": user.name, "email": user.email}), 200
+    return jsonify({"error": "Not authenticated"}), 401

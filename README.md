@@ -31,7 +31,7 @@ This is a Flask and React-based project designed for managing user-created ticke
 
 ### Frontend Features
 - Secure authentication integration with backend
-- Protected route management for authenticated users
+- AsyncRoute management for authenticated users
 - Fully responsive grid system using Material-UI's Grid and Box components
 - Dynamic fetching and displaying of tickets via RESTful APIs
 - Centralized theme system for colours, typography, and responsiveness

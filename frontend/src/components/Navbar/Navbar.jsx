@@ -9,19 +9,24 @@ import {
   Avatar,
   Menu,
   MenuItem,
+  Link,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth"; // Import useAuth hook
+import { useTheme } from "../../contexts/ThemeProvider"; // Optional: Import useTheme for theme toggling
 
 /**
  * Navbar Component
  *
- * This component represents the navigation bar at the top of the page.
- * It includes a logo, a search bar, and a profile section with a dropdown menu.
+ * The navigation bar at the top of the page. Includes a logo, search bar, and user profile section.
  *
  * @returns {JSX.Element} The Navbar component.
  */
-const Navbar = ({ user, onLogout }) => {
+const Navbar = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth(); // Get user and logout from the useAuth hook
+  const { toggleTheme } = useTheme(); // Optional: Add theme toggle functionality
+
   const [anchorEl, setAnchorEl] = useState(null);
 
   // Open dropdown menu
@@ -40,14 +45,9 @@ const Navbar = ({ user, onLogout }) => {
     handleMenuClose();
   };
 
-  // Logout handler
-  const handleLogoutClick = () => {
-    console.log("onLogout prop:", onLogout); // Debugging
-    if (onLogout) {
-      onLogout(); // Call the logout function
-    } else {
-      console.error("onLogout prop is undefined");
-    }
+  const handleLogout = async () => {
+    await logout(); // Call logout function from useAuth
+    navigate("/login"); // Redirect to login page after logout
     handleMenuClose();
   };
 
@@ -64,11 +64,13 @@ const Navbar = ({ user, onLogout }) => {
           {/* Logo Section */}
           <Grid item xs={6} sm={3} md={2}>
             <Box display="flex" alignItems="center" justifyContent="flex-start">
-              <img
-                src="/images/navbar/temp_logo.png"
-                alt="Logo"
-                style={{ maxHeight: "40px", width: "auto" }}
-              />
+              <Link href="/" style={{ display: "flex", alignItems: "center" }}>
+                <img
+                  src="/images/navbar/temp_logo.png"
+                  alt="Logo"
+                  style={{ maxHeight: "40px", width: "auto" }}
+                />
+              </Link>
             </Box>
           </Grid>
 
@@ -121,7 +123,8 @@ const Navbar = ({ user, onLogout }) => {
                 }}
               >
                 <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
-                <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                <MenuItem onClick={toggleTheme}>Toggle Theme</MenuItem> {/* Optional */}
               </Menu>
             </Box>
           </Grid>
