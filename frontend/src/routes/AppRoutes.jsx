@@ -8,17 +8,13 @@ import DeleteModal from "../components/Modals/DeleteModal";
 import CreateButton from "../components/Buttons/CreateButton";
 import Login from "../components/UserManagement/Login";
 import { Box } from "@mui/material"; // Ensure Box is imported
+import useTasks from "../hooks/useTasks"; // Use tasks directly
 import { useTaskContext } from "../contexts/TaskProvider"; // Import Task Context
 import { useModalContext } from "../contexts/ModalProvider"; // Import Modal Context
 
 const AppRoutes = ({ user, setUser, toggleTheme, logout }) => {
-  const {
-    tasks,
-    fetchTasks,
-    saveTask,
-    currentTicket,
-    setCurrentTicket,
-  } = useTaskContext();
+  const { currentTicket, setCurrentTicket } = useTaskContext();
+  const { tasks, fetchTasks, saveTask } = useTasks(); // Directly use the useTasks hook
   const { ticketModal, deleteModal } = useModalContext();
 
   const handleCreate = () => {
@@ -85,7 +81,7 @@ const AppRoutes = ({ user, setUser, toggleTheme, logout }) => {
           <AsyncRoute>
             <Box>
                 <Box sx={{ marginTop: "64px", padding: 2 }}>
-                    {console.log("Tasks passed to TaskList:", tasks)}
+                    {console.log("Tasks passed to AppRoutes:", tasks)}
                     {tasks.length > 0 ? (
                         <TaskList tasks={tasks} onEdit={handleEdit} onDelete={handleDelete} />
                     ) : (

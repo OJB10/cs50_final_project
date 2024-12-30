@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const useTasks = () => {
   const [tasks, setTasks] = useState([]);
@@ -54,6 +54,10 @@ const useTasks = () => {
       console.error("Error saving task:", error);
     }
   };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []); // Fetch tasks on mount
 
   return { tasks, fetchTasks, saveTask };
 };

@@ -13,6 +13,7 @@ This is a Flask and React-based project designed for managing user-created ticke
 ## Features
 
 ### Authentication & Security
+
 - Secure user authentication system with session management
 - Protected routes requiring user authentication
 - Session-based cookie management for secure data transfer
@@ -21,8 +22,9 @@ This is a Flask and React-based project designed for managing user-created ticke
 - Secure logout mechanism
 
 ### Backend Features
+
 - Modular route management using Flask Blueprints
-- Protected API endpoints with login_required decorator
+- Protected API endpoints with login\_required decorator
 - User authentication with login and registration
 - Ticket management system for creating, editing, and viewing tickets
 - SQLite database for lightweight storage
@@ -30,14 +32,18 @@ This is a Flask and React-based project designed for managing user-created ticke
 - CORS enabled for secure React and Flask integration
 
 ### Frontend Features
+
 - Secure authentication integration with backend
 - AsyncRoute management for authenticated users
 - Fully responsive grid system using Material-UI's Grid and Box components
 - Dynamic fetching and displaying of tickets via RESTful APIs
 - Centralized theme system for colours, typography, and responsiveness
 - Integrated light/dark mode toggle for user customization
+- TaskProvider context to manage global ticket state effectively
+- Automatic ticket loading on login and refresh
 
 ### General
+
 - Clear separation of backend and frontend logic
 - Modular architecture using blueprints for improved code organization
 - Secure cross-origin resource sharing (CORS) configuration
@@ -45,6 +51,7 @@ This is a Flask and React-based project designed for managing user-created ticke
 - Easily extensible for future iterations
 
 ## Technical Requirements
+
 - Python 3.11.5
 - Flask 3.1.0
 - SQLite 3.47.2
@@ -60,22 +67,26 @@ This is a private repository that is temporarily public for CS50x submission pur
 ### Backend Setup
 
 1. Navigate to the backend directory:
+
    ```bash
    cd backend
    ```
 
 2. Set up a virtual environment:
+
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
 3. Install the required dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
 
 4. Initialize the SQLite database:
+
    ```bash
    python
    >>> from app import db
@@ -84,6 +95,7 @@ This is a private repository that is temporarily public for CS50x submission pur
    ```
 
 5. Start the Flask application:
+
    ```bash
    python app.py
    ```
@@ -91,16 +103,19 @@ This is a private repository that is temporarily public for CS50x submission pur
 ### Frontend Setup
 
 1. Navigate to the frontend directory:
+
    ```bash
    cd frontend
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Start the React development server:
+
    ```bash
    npm start
    ```
@@ -113,12 +128,15 @@ This is a private repository that is temporarily public for CS50x submission pur
 4. Access the ticket management system through the authenticated interface
 
 ### API Endpoints
+
 - Authentication:
+
   - POST `/api/users/register`: Register a new user
   - POST `/api/users/login`: User login
   - POST `/api/users/logout`: User logout
 
 - Tickets (Protected Routes):
+
   - GET `/api/tickets`: Fetch all tickets
   - POST `/api/tickets`: Create a new ticket
   - PUT `/api/tickets/<id>`: Update a ticket
@@ -150,13 +168,20 @@ cs50_final_project/
 │   ├── public/              # Static files
 │   ├── src/
 │   │   ├── components/      # Reusable React components
-│   │   │   ├── Navbar/      # Navigation bar component
 │   │   │   ├── Buttons/     # Button components
 │   │   │   ├── Modals/      # Modal components
+│   │   │   ├── Navbar/      # Navigation bar component
+│   │   │   ├── Routes/      # Route oucomponent
 │   │   │   ├── UserManagement/  # Auth-related components
 │   │   │   └── TaskCard.jsx # Task card component
-│   │   ├── layouts/
-│   │   │   └── Layout.jsx   # Main layout component
+│   │   │   └── Layout.jsx # Main layout component
+│   │   ├── contexts/
+│   │   │   ├── TaskProvider # Task context for global state management
+│   │   │   └── ModalProvider# Modal context for global state management
+│   │   │   └── ThemeProvider 
+│   │   ├── hooks (useAuth.js, useModal.js, useTasks.js)
+│   │   ├── pages (Profile.jsx)
+│   │   ├── routes (AppRoutes.jsx)
 │   │   ├── theme.js         # Material-UI theme management
 │   │   ├── App.jsx          # Main React app
 │   │   └── index.js         # Application entry point
@@ -170,7 +195,7 @@ cs50_final_project/
 ## Troubleshooting
 
 - Ensure no other application is using ports 5000 or 3000
-- If npm start fails, try deleting node_modules and running npm install again
+- If npm start fails, try deleting node\_modules and running npm install again
 - Clear browser cookies and cache if experiencing authentication issues
 - Check CORS settings if experiencing API connection issues
 

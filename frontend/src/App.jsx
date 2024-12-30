@@ -24,13 +24,6 @@ const App = () => {
   const { tasks, fetchTasks, saveTask } = useTasks(); // Use the hook to fetch tasks
   const [appLoading, setAppLoading] = useState(true); // Add this state
 
-  // Effect to fetch tasks when user changes
-  useEffect(() => {
-    if (user) {
-      fetchTasks();
-    }
-  }, [user]);
-
   const handleCreate = () => {
     setCurrentTicket(null);
     ticketModal.openModal();
