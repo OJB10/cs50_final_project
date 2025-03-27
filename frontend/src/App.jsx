@@ -6,8 +6,8 @@ import { ModalProvider } from "./contexts/ModalProvider";
 import { AuthProvider } from "./contexts/AuthProvider";
 import RequireAuth from "./components/Routes/RequireAuth";
 import ProtectedContent from "./layouts/ProtectedContent";
-import Login from "./components/UserManagement/Login";
-import Register from "./components/UserManagement/Register";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import "./App.css";
 
 /**

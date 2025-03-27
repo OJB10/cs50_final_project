@@ -20,16 +20,34 @@ def register():
     """
     try:
         data = request.get_json()
-        name = data.get("name")
-        email = data.get("email")
-        password = data.get("password")
+        name = data.get("name", "").strip()
+        email = data.get("email", "").strip().lower()
+        password = data.get("password", "")
 
-        # Validate input
-        if not name or not email or not password:
-            return jsonify({"error": "Name, email, and password are required."}), 400
-
-        if User.query.filter_by(email=email).first():
-            return jsonify({"error": "Email is already registered."}), 400
+        # Enhanced input validation
+        validation_errors = {}
+        
+        if not name:
+            validation_errors["name"] = "Name is required."
+        
+        # Email validation
+        if not email:
+            validation_errors["email"] = "Email is required."
+        elif not email_is_valid(email):
+            validation_errors["email"] = "Please enter a valid email address."
+        elif User.query.filter_by(email=email).first():
+            validation_errors["email"] = "This email is already registered."
+        
+        # Password validation
+        if not password:
+            validation_errors["password"] = "Password is required."
+        elif len(password) < 8:
+            validation_errors["password"] = "Password must be at least 8 characters long."
+        elif not password_is_strong(password):
+            validation_errors["password"] = "Password is too weak. Include uppercase, lowercase, and numbers."
+        
+        if validation_errors:
+            return jsonify({"error": "Validation failed", "details": validation_errors}), 400
 
         # Create new user
         new_user = User(name=name, email=email)
@@ -41,6 +59,24 @@ def register():
     except Exception as e:
         print(f"Error during registration: {e}")
         return jsonify({"error": "An error occurred during registration."}), 500
+        
+def email_is_valid(email):
+    """Validate email format using a simple regex pattern."""
+    import re
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email) is not None
+
+def password_is_strong(password):
+    """Check if password meets strength requirements."""
+    # Has at least one lowercase letter
+    has_lower = any(c.islower() for c in password)
+    # Has at least one uppercase letter
+    has_upper = any(c.isupper() for c in password)
+    # Has at least one digit
+    has_digit = any(c.isdigit() for c in password)
+    
+    # Password is strong if it meets at least two of the three criteria
+    return sum([has_lower, has_upper, has_digit]) >= 2
 
 
 @user_bp.route('/login', methods=['POST'])

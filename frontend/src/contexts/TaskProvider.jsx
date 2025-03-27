@@ -3,14 +3,16 @@ import useTasks from "../hooks/useTasks";
 
 const TaskContext = createContext();
 
+/**
+ * TaskProvider Component
+ * 
+ * Provides task-related state and functionality to the entire application.
+ * Centralizes task management to prevent duplicate API calls.
+ */
 export const TaskProvider = ({ children }) => {
-  const { tasks, fetchTasks, saveTask } = useTasks(); // Hook for task operations
-  const [currentTicket, setCurrentTicket] = useState(null); // Selected ticket for edit/delete
-
-  useEffect(() => {
-    console.log("Tasks state in TaskProvider:", tasks);
-  }, [tasks]);
-
+  const { tasks, fetchTasks, saveTask, loading, error } = useTasks();
+  const [currentTicket, setCurrentTicket] = useState(null);
+  
   return (
     <TaskContext.Provider
       value={{
@@ -19,6 +21,8 @@ export const TaskProvider = ({ children }) => {
         saveTask,
         currentTicket,
         setCurrentTicket,
+        loading,
+        error
       }}
     >
       {children}

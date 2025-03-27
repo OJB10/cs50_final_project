@@ -169,14 +169,6 @@ export const AuthProvider = ({ children }) => {
     initializeAuth();
   }, [validateSession]);
 
-  // Fetch tasks once when user is authenticated
-  useEffect(() => {
-    if (user?.id) {
-      console.log("User authenticated, initial tasks fetch");
-      fetchTasks();
-    }
-  }, [user?.id, fetchTasks]);
-
   // Computed property for authentication status
   const isAuthenticated = !!user && !!user.id;
 
@@ -185,12 +177,57 @@ export const AuthProvider = ({ children }) => {
     console.log("Auth state changed:", { isAuthenticated, userId: user?.id });
   }, [isAuthenticated, user]);
 
+  // Register user
+  const register = async (userData) => {
+    try {
+      setLoading(true);
+      setAuthError(null);
+      console.log("Attempting registration...");
+      
+      const response = await fetch(`${API_BASE_URL}/users/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+      console.log("Registration response:", data);
+
+      if (response.ok) {
+        return { success: true, message: data.message || "Registration successful" };
+      } else {
+        let errorMessage = data.error || "Registration failed";
+        
+        // Handle detailed validation errors from backend
+        if (data.details) {
+          // Return the validation details for field-specific error handling
+          return { 
+            success: false, 
+            message: errorMessage,
+            validationErrors: data.details
+          };
+        }
+        
+        console.error("Registration failed:", errorMessage);
+        setAuthError(errorMessage);
+        return { success: false, message: errorMessage };
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      setAuthError("An error occurred during registration");
+      return { success: false, message: "An error occurred during registration" };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const value = {
     user,
     loading,
     authError,
     login,
     logout,
+    register,
     isAuthenticated,
     validateSession
   };
