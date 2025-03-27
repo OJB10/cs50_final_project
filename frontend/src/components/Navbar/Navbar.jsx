@@ -12,20 +12,22 @@ import {
   Link,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth"; // Import useAuth hook
-import { useTheme } from "../../contexts/ThemeProvider"; // Optional: Import useTheme for theme toggling
+import { useAuth } from "../../contexts/AuthProvider";
+import { useTheme } from "../../contexts/ThemeProvider";
 
 /**
  * Navbar Component
  *
  * The navigation bar at the top of the page. Includes a logo, search bar, and user profile section.
  *
- * @returns {JSX.Element} The Navbar component.
+ * @param {Object} props
+ * @param {Function} [props.onLogout] - Optional callback for logout
+ * @returns {JSX.Element} The Navbar component
  */
-const Navbar = () => {
+const Navbar = ({ onLogout }) => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth(); // Get user and logout from the useAuth hook
-  const { toggleTheme } = useTheme(); // Optional: Add theme toggle functionality
+  const { user, logout } = useAuth();
+  const { toggleTheme } = useTheme();
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -45,10 +47,16 @@ const Navbar = () => {
     handleMenuClose();
   };
 
+  // Handle logout
   const handleLogout = async () => {
-    await logout(); // Call logout function from useAuth
-    navigate("/login"); // Redirect to login page after logout
     handleMenuClose();
+    
+    // Use provided logout callback if available, otherwise use the default logout
+    if (onLogout) {
+      onLogout();
+    } else {
+      logout();
+    }
   };
 
   return (
