@@ -7,13 +7,18 @@ import {
   DialogActions,
   Button,
   Grid,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  Box,
 } from "@mui/material";
 
 /**
  * TicketModal Component
  * 
  * A modal dialog component for creating or editing a ticket.
- * It displays a form with fields for the ticket's name, description, and due date.
+ * It displays a form with fields for the ticket's name, description, status, and due date.
  * Handles form submission and provides callbacks for saving and closing the modal.
  * 
  * @param {boolean} open - Determines if the modal is open.
@@ -25,6 +30,9 @@ import {
 const TicketModal = ({ open, onClose, onSave, initialData = {}, isEdit = false }) => {
   const [formData, setFormData] = useState(initialData);
 
+  // Status options for the dropdown
+  const statusOptions = ["Pending", "In Progress", "Completed", "Blocked"];
+
   /**
    * Effect to reset form data whenever the modal opens or initialData changes.
    */
@@ -32,13 +40,14 @@ const TicketModal = ({ open, onClose, onSave, initialData = {}, isEdit = false }
     if (initialData) {
       const formattedData = {
         ...initialData,
+        status: initialData.status || "Pending",
         dueDate: initialData.dueDate
           ? new Date(initialData.dueDate).toISOString().split("T")[0]
           : "",
       };
       setFormData(formattedData);
     } else {
-      setFormData({});
+      setFormData({ status: "Pending" });
     }
   }, [initialData, open]);
 
@@ -65,74 +74,117 @@ const TicketModal = ({ open, onClose, onSave, initialData = {}, isEdit = false }
     <Dialog
       open={open}
       onClose={onClose}
-      maxWidth="md"
       fullWidth
-      sx={{
-        ".MuiDialog-paper": {
-          margin: "0 auto",
-          padding: 2,
-          borderRadius: 2,
-          border: 1,
-          borderColor: "divider",
-          backgroundColor: "background.paper",
+      maxWidth="sm"
+      PaperProps={{
+        className: "modal-container",
+        sx: {
           width: {
             xs: "90%", // Small screens
             sm: "80%", // Tablets
-            md: "50%", // Desktop, central 6 columns
+            md: "550px", // Desktop - fixed width for consistency
           },
-          maxWidth: "none", // Disable max width constraint
-        },
+          maxWidth: "none",
+        }
       }}
     >
-      <DialogTitle sx={{ textAlign: "center", fontWeight: "bold" }}>
-        {isEdit ? "Edit Ticket" : "Create New Ticket"}
-      </DialogTitle>
-      <DialogContent>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              name="name"
-              label="Name"
-              fullWidth
-              value={formData.name || ""}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              name="description"
-              label="Description"
-              fullWidth
-              multiline
-              rows={4}
-              value={formData.description || ""}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              name="dueDate"
-              label="Due Date"
-              type="date"
-              fullWidth
-              InputLabelProps={{ shrink: true }}
-              value={formData.dueDate || ""}
-              onChange={handleChange}
-            />
-          </Grid>
-        </Grid>
-      </DialogContent>
-      <DialogActions
-        sx={{
-          justifyContent: "flex-end", // Align buttons to the right
-          gap: 1, // Add spacing between buttons
-          paddingRight: 2, // Optional: adjust padding for better spacing
+      <DialogTitle 
+        className="h4 text-center"
+        sx={{ 
+          paddingBottom: 1,
+          borderBottom: "1px solid",
+          borderColor: "divider",
         }}
       >
-        <Button onClick={onClose} color="warning" variant="outlined">
+        {isEdit ? "Edit Ticket" : "Create New Ticket"}
+      </DialogTitle>
+      
+      <DialogContent sx={{ paddingY: 3 }}>
+        <Box component="form" className="mt-2">
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                name="name"
+                label="Name"
+                fullWidth
+                required
+                variant="outlined"
+                value={formData.name || ""}
+                onChange={handleChange}
+                placeholder="Enter task name"
+              />
+            </Grid>
+            
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel id="status-label">Status</InputLabel>
+                <Select
+                  labelId="status-label"
+                  name="status"
+                  value={formData.status || "Pending"}
+                  onChange={handleChange}
+                  label="Status"
+                >
+                  {statusOptions.map(option => (
+                    <MenuItem key={option} value={option}>{option}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            
+            <Grid item xs={12} sm={6}>
+              <TextField
+                name="dueDate"
+                label="Due Date"
+                type="date"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                value={formData.dueDate || ""}
+                onChange={handleChange}
+              />
+            </Grid>
+            
+            <Grid item xs={12}>
+              <TextField
+                name="description"
+                label="Description"
+                fullWidth
+                multiline
+                rows={4}
+                variant="outlined"
+                value={formData.description || ""}
+                onChange={handleChange}
+                placeholder="Enter task description"
+              />
+            </Grid>
+          </Grid>
+        </Box>
+      </DialogContent>
+      
+      <DialogActions
+        sx={{
+          padding: 2,
+          paddingTop: 0,
+          justifyContent: "flex-end",
+          gap: 1,
+          borderTop: "1px solid",
+          borderColor: "divider",
+        }}
+      >
+        <Button 
+          onClick={onClose} 
+          variant="outlined"
+          className="btn"
+          color="primary"
+        >
           Cancel
         </Button>
-        <Button onClick={handleSubmit} color="success" variant="contained">
+        <Button 
+          onClick={handleSubmit} 
+          variant="contained"
+          className="btn"
+          color="primary"
+        >
           {isEdit ? "Save Changes" : "Create"}
         </Button>
       </DialogActions>

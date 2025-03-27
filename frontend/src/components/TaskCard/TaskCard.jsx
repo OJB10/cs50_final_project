@@ -39,25 +39,31 @@ const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete }) => {
       })
     : "No due date";
 
+  // Map status to appropriate color
+  const getStatusColor = (status) => {
+    const statusMap = {
+      "Completed": "success",
+      "In Progress": "info",
+      "Pending": "warning",
+      "Blocked": "error",
+    };
+    return statusMap[status] || "primary";
+  };
+
   return (
     <Card
+      className="card"
       sx={{
-        padding: 2,
-        borderRadius: 2,
-        border: 1,
-        borderColor: "divider",
-        backgroundColor: "background.paper",
-        boxShadow: 2,
-        height: "100%", // Ensures consistent card height
+        height: "100%", 
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between", // Aligns content vertically
+        justifyContent: "space-between",
+        padding: 0, // Reset padding as it's handled by CardContent
       }}
     >
-      <CardContent sx={{ paddingBottom: "8px !important" }}>
+      <CardContent sx={{ paddingBottom: "8px !important", flexGrow: 1 }}>
         {/* Status Chip displayed at the top-right corner */}
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Box /> {/* Empty spacer to align the Chip to the right */}
+        <Box display="flex" justifyContent="flex-end" alignItems="center" mb={1}>
           <Chip
             label={
               <Box display="flex" alignItems="center">
@@ -65,8 +71,8 @@ const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete }) => {
                 {status}
               </Box>
             }
-            color="primary"
-            sx={{ fontWeight: "bold" }}
+            color={getStatusColor(status)}
+            sx={{ fontWeight: "var(--font-weight-medium)" }}
           />
         </Box>
 
@@ -74,13 +80,18 @@ const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete }) => {
         <Typography
           variant="h6"
           component="div"
-          sx={{ fontWeight: "bold", marginTop: 2, marginBottom: 1 }}
+          className="h6"
+          sx={{ marginBottom: 1 }}
         >
           {name}
         </Typography>
 
         {/* Task Description */}
-        <Typography variant="body2" color="text.secondary">
+        <Typography 
+          variant="body2" 
+          color="text.secondary"
+          className="body-small"
+        >
           {description}
         </Typography>
       </CardContent>
@@ -92,6 +103,8 @@ const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete }) => {
           justifyContent: "space-between",
           alignItems: "center",
           paddingTop: 1,
+          borderTop: "1px solid",
+          borderColor: "divider",
         }}
       >
         {/* Action Buttons: Edit and Delete */}
@@ -101,7 +114,8 @@ const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete }) => {
             size="small"
             variant="outlined"
             color="primary"
-            onClick={onEdit} // Trigger the edit callback
+            className="btn"
+            onClick={onEdit}
           >
             Edit
           </Button>
@@ -110,7 +124,8 @@ const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete }) => {
             size="small"
             variant="contained"
             color="error"
-            onClick={onDelete} // Trigger the delete callback
+            className="btn"
+            onClick={onDelete}
           >
             Delete
           </Button>
@@ -120,6 +135,7 @@ const TaskCard = ({ name, description, status, dueDate, onEdit, onDelete }) => {
         <Typography
           variant="caption"
           color="text.secondary"
+          className="caption"
           sx={{
             display: "flex",
             alignItems: "center",

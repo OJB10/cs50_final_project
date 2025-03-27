@@ -1,0 +1,66 @@
+:root {
+  /* Primary Colors */
+  --primary: #BA4FFF;
+  --primary-light: #FF7FFF;
+  --primary-dark: #7F1FCC;
+
+  /* Secondary Colors */
+  --secondary: #FF41F2;
+  --secondary-light: #FF71FF;
+  --secondary-dark: #CC00EF;
+
+  /* Tertiary Colors */
+  --tertiary: #FF504A;
+  --tertiary-light: #FF7F7D;
+  --tertiary-dark: #CC3017;
+
+  /* State Colors */
+  --info: #5F5FEF;
+  --success: #40C093;
+  --warning: #FFB82B;
+  --error: #FF4242;
+
+  /* Light Theme */
+  --light-background: #F5F5F5;
+  --light-surface: #FFFFFF;
+  --light-text-primary: #202641;
+  --light-text-secondary: #5C5C77;
+  --light-text-disabled: #B4B4C7;
+  --light-divider: #E5E5E5;
+
+  /* Dark Theme */
+  --dark-background: #202641;
+  --dark-surface: #2A2A3C;
+  --dark-text-primary: #F5F5F5;
+  --dark-text-secondary: #B4B4C7;
+  --dark-text-disabled: #5C5C77;
+  --dark-divider: #5C5C77;
+
+  /* Common */
+  --border-radius-small: 4px;
+  --border-radius-medium: 8px;
+  --border-radius-large: 16px;
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Light Theme Class */
+.light-mode {
+  --background: var(--light-background);
+  --surface: var(--light-surface);
+  --text-primary: var(--light-text-primary);
+  --text-secondary: var(--light-text-secondary);
+  --text-disabled: var(--light-text-disabled);
+  --divider: var(--light-divider);
+}
+
+/* Dark Theme Class */
+.dark-mode {
+  --background: var(--dark-background);
+  --surface: var(--dark-surface);
+  --text-primary: var(--dark-text-primary);
+  --text-secondary: var(--dark-text-secondary);
+  --text-disabled: var(--dark-text-disabled);
+  --divider: var(--dark-divider);
+}

@@ -1,9 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
-import theme from "./theme";
-import { useTheme } from "./contexts/ThemeProvider";
+import { ThemeProvider } from "./contexts/ThemeProvider";
 import { TaskProvider } from "./contexts/TaskProvider";
 import { ModalProvider } from "./contexts/ModalProvider";
 import { AuthProvider } from "./contexts/AuthProvider";
@@ -11,19 +8,17 @@ import RequireAuth from "./components/Routes/RequireAuth";
 import ProtectedContent from "./layouts/ProtectedContent";
 import Login from "./components/UserManagement/Login";
 import Register from "./components/UserManagement/Register";
+import "./App.css";
 
 /**
  * App Component
  * 
  * Root component that sets up all providers and routes.
- * Handles theme context and provides all necessary context providers.  
+ * Integrates all context providers and routing structure.
  */
 const App = () => {
-  const { mode } = useTheme(); // Tracks the current theme (light/dark)
-
   return (
-    <ThemeProvider theme={theme(mode)}>
-      <CssBaseline />
+    <ThemeProvider>
       <TaskProvider>
         <ModalProvider>
           <Router>
