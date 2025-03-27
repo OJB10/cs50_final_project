@@ -4,7 +4,7 @@ import useTasks from "../hooks/useTasks";
 
 const AuthContext = createContext();
 const LOCAL_STORAGE_KEY = 'dash_user';
-const API_BASE_URL = 'http://127.0.0.1:5000/api';
+const API_BASE_URL = 'http://127.0.0.1:5001/api';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -37,8 +37,26 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       console.log("Validating session with server");
+      
+      // Get the user from localStorage for auth header fallback
+      const storedUser = localStorage.getItem('dash_user');
+      let authHeader = '';
+      if (storedUser) {
+        try {
+          const user = JSON.parse(storedUser);
+          // Simple token using user ID - in a real app, use a proper JWT
+          authHeader = `Bearer user-${user.id}`;
+        } catch (err) {
+          console.error("Failed to parse stored user:", err);
+        }
+      }
+      
       const response = await fetch(`${API_BASE_URL}/users/session`, {
         credentials: "include",
+        headers: {
+          "Origin": window.location.origin,
+          ...(authHeader ? { 'Authorization': authHeader } : {})
+        }
       });
 
       if (response.ok) {
@@ -56,6 +74,30 @@ export const AuthProvider = ({ children }) => {
           clearUser();
         }
       } else {
+        // Try one more time with auth header if we didn't use it and have stored user
+        if (!authHeader && storedUser) {
+          try {
+            const user = JSON.parse(storedUser);
+            const retryHeader = `Bearer user-${user.id}`;
+            const retryResponse = await fetch(`${API_BASE_URL}/users/session`, {
+              credentials: "include",
+              headers: {
+                "Origin": window.location.origin,
+                'Authorization': retryHeader
+              }
+            });
+            
+            if (retryResponse.ok) {
+              const data = await retryResponse.json();
+              if (data?.id && data?.name && data?.email) {
+                persistUser(data);
+                return true;
+              }
+            }
+          } catch (err) {
+            console.error("Error during session retry:", err);
+          }
+        }
         clearUser();
       }
       return false;
@@ -77,7 +119,10 @@ export const AuthProvider = ({ children }) => {
       
       const response = await fetch(`${API_BASE_URL}/users/login`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Origin": window.location.origin
+        },
         credentials: "include",
         body: JSON.stringify(credentials),
       });

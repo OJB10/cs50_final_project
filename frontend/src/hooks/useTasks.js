@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
-const API_BASE_URL = 'http://127.0.0.1:5000/api';
+const API_BASE_URL = 'http://127.0.0.1:5001/api';
 
 const useTasks = () => {
   const [tasks, setTasks] = useState([]);
@@ -21,9 +21,25 @@ const useTasks = () => {
       setLoading(true);
       setError(null);
 
+      // Get the user from localStorage for auth header fallback
+      const storedUser = localStorage.getItem('dash_user');
+      let authHeader = '';
+      if (storedUser) {
+        try {
+          const user = JSON.parse(storedUser);
+          // Simple "token" using user ID - in a real app, use a proper JWT
+          authHeader = `Bearer user-${user.id}`;
+        } catch (err) {
+          console.error("Failed to parse stored user:", err);
+        }
+      }
+
       const response = await fetch(`${API_BASE_URL}/tickets`, {
         method: "GET",
         credentials: "include",
+        headers: {
+          ...(authHeader ? { 'Authorization': authHeader } : {})
+        }
       });
   
       if (response.ok) {
@@ -58,9 +74,24 @@ const useTasks = () => {
         ? `${API_BASE_URL}/tickets/${taskData.id}`
         : `${API_BASE_URL}/tickets`;
 
+      // Get auth header
+      const storedUser = localStorage.getItem('dash_user');
+      let authHeader = '';
+      if (storedUser) {
+        try {
+          const user = JSON.parse(storedUser);
+          authHeader = `Bearer user-${user.id}`;
+        } catch (err) {
+          console.error("Failed to parse stored user:", err);
+        }
+      }
+
       const response = await fetch(url, {
         method: taskData.id ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          ...(authHeader ? { 'Authorization': authHeader } : {})
+        },
         credentials: "include",
         body: JSON.stringify(ticketPayload),
       });

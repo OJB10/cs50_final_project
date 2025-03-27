@@ -3,13 +3,19 @@
 __pycache__/
 instance/
 venv/
+**/dash_env/
+**/.pytest_cache/
+**/flask_session/
 
 # Node.js specific files
 node_modules/
 /frontend/build/
+/frontend/.pnp
+/frontend/.pnp.js
+/frontend/coverage/
 
 # IDE-specific files and system metadata
-*.vscode/
+.vscode/
 .idea/
 .DS_Store
 
@@ -37,10 +43,21 @@ htmlcov/
 
 # Databases
 *.sqlite
-.db
+*.db
+**/site.db
 
 # MacOS Thumbnails
 ._*
 
 # Design tool files
 *.fig
+
+# Docker
+docker-compose.override.yml
+.docker/
+**/postgres_data/
+
+# Local production files
+**/dist/
+**/build/
+**/out/

@@ -26,14 +26,14 @@ def create_app():
         SESSION_FILE_THRESHOLD=500  # Number of sessions stored in memory
     )
 
-    # Cookie configuration
+    # Cookie configuration for Docker environment
     app.config.update(
         SESSION_COOKIE_NAME="session",
         SESSION_COOKIE_DOMAIN=None,  # Allow all domains
         SESSION_COOKIE_PATH="/",
-        SESSION_COOKIE_HTTPONLY=True,  # 
-        SESSION_COOKIE_SECURE="None",  # Set to True in production with HTTPS
-        SESSION_COOKIE_SAMESITE="None" # Ensure compatibility
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SECURE=False,  # Set to True in production with HTTPS
+        SESSION_COOKIE_SAMESITE="None"  # String "None" for cross-origin in Docker
     )
 
     # CORS configuration
@@ -41,9 +41,9 @@ def create_app():
         CORS_HEADERS="Content-Type",
         CORS_RESOURCES={
             r"/api/*": {
-                "origins": ["http://localhost:3000"],
+                "origins": ["http://localhost:3000", "http://127.0.0.1:3000", "http://frontend:3000"],
                 "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-                "allow_headers": ["Content-Type"],
+                "allow_headers": ["Content-Type", "Authorization"],
                 "supports_credentials": True,
                 "expose_headers": ["Set-Cookie"]
             }
@@ -61,17 +61,27 @@ def create_app():
     # Apply CORS headers to all responses
     @app.after_request
     def apply_cors_headers(response):
-        response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"
+        # Get the Origin header from the request
+        origin = request.headers.get('Origin')
+        allowed_origins = ["http://localhost:3000", "http://127.0.0.1:3000", "http://frontend:3000"]
+        
+        # If the origin is in our allowed list, set it in the response
+        if origin in allowed_origins:
+            response.headers["Access-Control-Allow-Origin"] = origin
+        else:
+            # Default fallback
+            response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"
+            
         response.headers["Access-Control-Allow-Credentials"] = "true"
-        response.headers["Access-Control-Allow-Headers"] = "content-type"
+        response.headers["Access-Control-Allow-Headers"] = "content-type, authorization"
         response.headers["Access-Control-Allow-Methods"] = "DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT"
         return response
 
-    # Configure the SQLite database
-    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'site.db')
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'  # SQLite database path
+    # Configure the database (PostgreSQL in Docker, SQLite for local development)
+    database_url = os.environ.get('DATABASE_URL', f'sqlite:///{os.path.join(os.path.dirname(os.path.abspath(__file__)), "site.db")}')
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    print(f"Database path resolved to: {db_path}")  # Debugging line
+    print(f"Database URL: {database_url}")  # Debugging line
 
     # Initialize Flask extensions
     db.init_app(app)
@@ -142,5 +152,5 @@ if __name__ == '__main__':
         db.create_all()
         print("Database and tables created.")  # Debugging line
 
-    # Start the Flask development server
-    app.run(debug=True)
+    # Start the Flask development server (listen on all interfaces for Docker)
+    app.run(host='0.0.0.0', debug=True)

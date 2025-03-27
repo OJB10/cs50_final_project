@@ -5,8 +5,8 @@
  * It manages environment-specific settings and provides a consistent configuration interface.
  */
 
-// Default to development API if not specified
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000/api';
+// Default to development API if not specified (port 5001 when using Docker)
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5001/api';
 
 // Export API URL for use throughout the application
 export { API_BASE_URL };
