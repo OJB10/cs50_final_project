@@ -2,15 +2,6 @@ from datetime import datetime
 from extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash  # Add hashing utilities
 
-# Methods for password management
-def set_password(self, password):
-    """Hash and set the user's password."""
-    self.password_hash = generate_password_hash(password)
-
-def check_password(self, password):
-    """Check if the password matches the hash."""
-    return check_password_hash(self.password_hash, password)
-
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)

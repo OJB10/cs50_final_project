@@ -2,7 +2,6 @@ from flask import Blueprint, jsonify, request
 from datetime import datetime
 from models import Ticket
 from extensions import db
-from flask import Blueprint
 from decorators import login_required
 
 ticket_bp = Blueprint("tickets_blueprint", __name__)
